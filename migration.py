@@ -1,12 +1,11 @@
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn import svm 
-import seaborn as sns 
-import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
 import numpy as np
-from sklearn.naive_bayes import GaussianNB
-
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVR
+from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 data = pd.read_csv('migration_nz.csv')
 data.head(10)
 data['Measure'].unique()
@@ -60,3 +59,25 @@ corr = data.corr()
 sns.heatmap(corr, xticklabels=corr.columns.values, yticklabels=corr.columns.values)
 plt.show()  # Display the heatmap
 
+# Filter data for different values (e.g., Arrivals, Departures, Net)
+arrivals_data = data[data['Measure'] == 0]  # Assuming 0 represents Arrivals
+departures_data = data[data['Measure'] == 1]  # Assuming 1 represents Departures
+net_data = data[data['Measure'] == 2]  # Assuming 2 represents Net
+
+# Create separate bar plots for each value
+plt.figure(figsize=(10, 6))
+
+# Bar plot for Arrivals
+plt.bar(arrivals_data['Year'], arrivals_data['Value'], label='Arrivals', color='blue')
+
+# Bar plot for Departures
+plt.bar(departures_data['Year'], departures_data['Value'], label='Departures', color='green')
+
+# Bar plot for Net
+plt.bar(net_data['Year'], net_data['Value'], label='Net', color='red')
+
+plt.xlabel('Year')
+plt.ylabel('Value')
+plt.title('Migration Trends Over Years')
+plt.legend()
+plt.show()
