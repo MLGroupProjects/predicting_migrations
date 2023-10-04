@@ -6,8 +6,19 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
+
 data = pd.read_csv('migration_nz.csv')
 data.head(10)
+# Unique Values - Country
+print(f'Country unique values:\n{data.Country.value_counts()}')
+
+is_NaN = data.isnull()
+row_has_NaN = is_NaN.any(axis=1)
+rows_with_NaN = data[row_has_NaN]
+pd.set_option('display.max_rows', data.shape[0]+1)
+print(rows_with_NaN)
+
 data['Measure'].unique()
 
 data['Measure'].replace("Arrivals",0,inplace=True)
