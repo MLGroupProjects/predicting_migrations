@@ -64,17 +64,17 @@ arrivals_data = data[data['Measure'] == 0]  # Assuming 0 represents Arrivals
 departures_data = data[data['Measure'] == 1]  # Assuming 1 represents Departures
 net_data = data[data['Measure'] == 2]  # Assuming 2 represents Net
 
-# Create separate bar plots for each value
+# Group data by year and sum the values for each measure
+arrivals_grouped = arrivals_data.groupby('Year')['Value'].sum()
+departures_grouped = departures_data.groupby('Year')['Value'].sum()
+net_grouped = net_data.groupby('Year')['Value'].sum()
+
+# Create a stacked bar chart
 plt.figure(figsize=(10, 6))
 
-# Bar plot for Arrivals
-plt.bar(arrivals_data['Year'], arrivals_data['Value'], label='Arrivals', color='blue')
-
-# Bar plot for Departures
-plt.bar(departures_data['Year'], departures_data['Value'], label='Departures', color='green')
-
-# Bar plot for Net
-plt.bar(net_data['Year'], net_data['Value'], label='Net', color='red')
+plt.bar(arrivals_grouped.index, arrivals_grouped, label='Arrivals', color='blue')
+plt.bar(departures_grouped.index, departures_grouped, label='Departures', color='green', bottom=arrivals_grouped)
+plt.bar(net_grouped.index, net_grouped, label='Net', color='red', bottom=arrivals_grouped + departures_grouped)
 
 plt.xlabel('Year')
 plt.ylabel('Value')
