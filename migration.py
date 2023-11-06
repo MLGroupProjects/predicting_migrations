@@ -6,6 +6,13 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_absolute_error
+from sklearn.cluster import KMeans
+# Create a K-Means clustering model
+
+
+# Fit the model to your data
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
 
 # Load the data
 data = pd.read_csv('migration_nz.csv')
@@ -105,3 +112,20 @@ print(f"Random Forest MAE: {mae_rf}")
 #print(f"SVM MAE: {mae_svm}")
 print(f"KNN MAE: {mae_knn}")
 
+kmeans = KMeans(n_clusters=3, random_state=9)  # You can adjust the number of clusters as needed
+
+# Standardize the features
+scaler = StandardScaler()
+X_std = scaler.fit_transform(X)
+
+# Create a K-Means clustering model
+kmeans = KMeans(n_clusters=3, random_state=9)  # You can adjust the number of clusters as needed
+
+# Fit the model to your standardized data
+data['Cluster'] = kmeans.fit_predict(X_std)
+
+plt.scatter(X_std[:, 0], X_std[:, 1], c=data['Cluster'], cmap='viridis')
+plt.xlabel('Feature 1')
+plt.ylabel('Feature 2')
+plt.title('K-Means Clustering')
+plt.show()
